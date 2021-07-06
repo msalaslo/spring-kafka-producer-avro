@@ -1,0 +1,69 @@
+{
+  "fields": [
+    {
+      "name": "id",
+      "type": {
+        "avro.java.string": "String",
+        "type": "string"
+      }
+    },
+    {
+      "name": "images",
+      "type": {
+        "items": {
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "avro.java.string": "String",
+                "type": "string"
+              }
+            },
+            {
+              "name": "score",
+              "type": "int"
+            },
+            {
+              "name": "type",
+              "type": {
+                "avro.java.string": "String",
+                "type": "string"
+              }
+            },
+            {
+              "name": "bbox",
+              "type": {
+                "fields": [
+                  {
+                    "name": "x",
+                    "type": "int"
+                  },
+                  {
+                    "name": "y",
+                    "type": "int"
+                  },
+                  {
+                    "name": "w",
+                    "type": "int"
+                  },
+                  {
+                    "name": "h",
+                    "type": "int"
+                  }
+                ],
+                "name": "Bbox",
+                "type": "record"
+              }
+            }
+          ],
+          "name": "Image",
+          "type": "record"
+        },
+        "type": "array"
+      }
+    }
+  ],
+  "name": "AnalysisResult",
+  "namespace": "com.verisure.advmon.image",
+  "type": "record"
+}
