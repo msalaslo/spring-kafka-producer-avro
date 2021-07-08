@@ -17,27 +17,27 @@ import lombok.extern.slf4j.Slf4j;
 public class ImageRecognitionResultKafkaProducer {
 
 	@Autowired
-	private KafkaTemplate<Integer, AnalysisResult> analysisResultTemplate;
+	private KafkaTemplate<String, AnalysisResult> analysisResultTemplate;
 
 	@Autowired
 	TestKafkaProducerConfig config;
 
-	public void sendRecord(Integer key, AnalysisResult analysisResult) {
+	public void sendRecord(String key, AnalysisResult analysisResult) {
 		log.info("Sending message to topic " + config.getEventProducerTopicName() + " with key=[" + key + ", value=["
 				+ analysisResult + "]");
 		analysisResultTemplate.send(config.getEventProducerTopicName(), key, analysisResult);
 	}
 
-	public void sendRecordWithResult(Integer key, AnalysisResult analysisResult) {
+	public void sendRecordWithResult(String key, AnalysisResult analysisResult) {
 		log.info("Sending message to topic " + config.getEventProducerTopicName() + "  with key=[" + key + ", value=["
 				+ analysisResult + "]");
 
-		ListenableFuture<SendResult<Integer, AnalysisResult>> future = analysisResultTemplate
+		ListenableFuture<SendResult<String, AnalysisResult>> future = analysisResultTemplate
 				.send(config.getEventProducerTopicName(), key, analysisResult);
-		future.addCallback(new ListenableFutureCallback<SendResult<Integer, AnalysisResult>>() {
+		future.addCallback(new ListenableFutureCallback<SendResult<String, AnalysisResult>>() {
 
 			@Override
-			public void onSuccess(SendResult<Integer, AnalysisResult> result) {
+			public void onSuccess(SendResult<String, AnalysisResult> result) {
 				log.info("Sent message with key=[" + key + ", value=[" + analysisResult + "], offset=["
 						+ result.getRecordMetadata().offset() + "]");
 			}

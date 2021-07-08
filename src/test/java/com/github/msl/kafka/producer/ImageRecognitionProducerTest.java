@@ -29,8 +29,8 @@ public class ImageRecognitionProducerTest {
 			Image image = Image.newBuilder().setId(i +"").setBbox(bbox).setScore(99).setType("person").build();
 			List<Image> images = new ArrayList<>();
 			images.add(image);
-			AnalysisResult analysisResult = AnalysisResult.newBuilder().setId(i +"").setImages(images).build();
-			producer.sendRecord(Integer.valueOf(i), analysisResult);
+			AnalysisResult analysisResult = AnalysisResult.newBuilder().setIdInstallation("7777").setPosese("PRUEBA-MSL").setSei("1234567890").setId(i +"").setDevice("PANEL").setImages(images).build();
+			producer.sendRecord(String.valueOf(i), analysisResult);
 		}
 	}
 

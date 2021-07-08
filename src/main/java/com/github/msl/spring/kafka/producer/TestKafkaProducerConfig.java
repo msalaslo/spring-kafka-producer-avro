@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +14,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
 import com.verisure.advmon.image.AnalysisResult;
-import com.verisure.spike.TestDTO;
 
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import lombok.Data;
@@ -55,41 +53,28 @@ public class TestKafkaProducerConfig {
     private Map<String, Object> getKafkaConnProps(){
     	Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, producerBootstrapAddress);
-//		props.put("schema.registry.url", schemaRegistryUrl);
+		props.put("schema.registry.url", schemaRegistryUrl);
 
 		props.put("security.protocol", producerSecurityProtocol);
 		props.put("sasl.mechanism", producerSaslMechanism);
 		props.put("sasl.jaas.config", producerSaslJaasConfig);
 		
-		props.put("basic.auth.credentials.source", srAuthCredentialsSource);
-		props.put("basic.auth.user.info", srUserInfo);
+//		props.put("basic.auth.credentials.source", srAuthCredentialsSource);
+//		props.put("basic.auth.user.info", srUserInfo);
     	return props;
     }
     
     @Bean
-    public ProducerFactory<Integer, AnalysisResult> analysisResultProducerFactory() {
-    	Map<String, Object> props = getKafkaConnProps();
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
-    	return new DefaultKafkaProducerFactory<>(props);
-    }
-    
-    @Bean
-    public ProducerFactory<String, TestDTO> integrationSpikeProducerFactory() {
+    public ProducerFactory<String, AnalysisResult> analysisResultProducerFactory() {
     	Map<String, Object> props = getKafkaConnProps();
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
-        return new DefaultKafkaProducerFactory<>(props);
+    	return new DefaultKafkaProducerFactory<>(props);
     }
-    
+        
     @Bean
-    public KafkaTemplate<Integer, AnalysisResult> analysisResultKafkaTemplate() {
+    public KafkaTemplate<String, AnalysisResult> analysisResultKafkaTemplate() {
         return new KafkaTemplate<>(analysisResultProducerFactory());
     }
-    
-    @Bean
-    public KafkaTemplate<String, TestDTO> integrationSpikeTeplate() {
-        return new KafkaTemplate<>(integrationSpikeProducerFactory());
-    }
-    
+       
 }

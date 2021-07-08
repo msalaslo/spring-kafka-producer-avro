@@ -7,6 +7,34 @@
         "type": "string"
       }
     },
+        {
+      "name": "idInstallation",
+      "type": {
+        "avro.java.string": "String",
+        "type": "string"
+      }
+    },
+    {
+      "name": "posese",
+      "type": {
+        "avro.java.string": "String",
+        "type": "string"
+      }
+    },
+    {
+      "name": "sei",
+      "type": {
+        "avro.java.string": "String",
+        "type": "string"
+      }
+    },
+    {
+      "name": "device",
+      "type": {
+        "avro.java.string": "String",
+        "type": "string"
+      }
+    },
     {
       "name": "images",
       "type": {

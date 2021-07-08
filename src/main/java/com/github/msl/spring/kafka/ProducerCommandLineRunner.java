@@ -10,11 +10,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.kafka.annotation.EnableKafka;
 
 import com.github.msl.spring.kafka.producer.service.ImageRecognitionResultKafkaProducer;
-import com.github.msl.spring.kafka.producer.service.IntegrationSpikeKafkaProducer;
 import com.verisure.advmon.image.AnalysisResult;
 import com.verisure.advmon.image.Bbox;
 import com.verisure.advmon.image.Image;
-import com.verisure.spike.TestDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,9 +24,6 @@ public class ProducerCommandLineRunner implements CommandLineRunner {
 
 	@Autowired
 	private ImageRecognitionResultKafkaProducer producerImageProcessingResult;
-	
-	@Autowired
-	private IntegrationSpikeKafkaProducer producerIntegrationSpike;
 	
     public static void main(String[] args) {
         log.info("STARTING THE APPLICATION");
@@ -43,24 +38,16 @@ public class ProducerCommandLineRunner implements CommandLineRunner {
 			Image image = Image.newBuilder().setId(i +"").setBbox(bbox).setScore(99).setType("person").build();
 			List<Image> images = new ArrayList<>();
 			images.add(image);
-			AnalysisResult analysisResult = AnalysisResult.newBuilder().setId(i +"").setImages(images).build();
-			producerImageProcessingResult.sendRecordWithResult(Integer.valueOf(i), analysisResult);
+			AnalysisResult analysisResult = AnalysisResult.newBuilder().setIdInstallation("7777").setPosese("PRUEBA-MSL").setSei("1234567890").setId(i +"").setDevice("PANEL").setImages(images).build();
+			producerImageProcessingResult.sendRecordWithResult(String.valueOf(i), analysisResult);
 		}
 	}
 	
-	public void testProduceIntegrationSpike() {
-		log.info("Producing record.");
-		for(int i=0; i<10; i++) {
-			TestDTO testDto = TestDTO.newBuilder().setMyField1(1).setMyField2(1200).setMyField3("test from java").build();
-			producerIntegrationSpike.sendRecord("key", testDto);
-		}
-	}
 
     @Override
     public void run(String... args) throws Exception {
 		log.info("Running.");
 		testProduceImageProcessingResult();
-		testProduceIntegrationSpike();
 		log.info("Stopping.");
 
     }
