@@ -13,6 +13,7 @@ import com.github.msl.spring.kafka.producer.service.ImageRecognitionResultKafkaP
 import com.verisure.advmon.image.AnalysisResult;
 import com.verisure.advmon.image.Bbox;
 import com.verisure.advmon.image.Image;
+import com.verisure.advmon.image.Result;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,12 +35,15 @@ public class ProducerCommandLineRunner implements CommandLineRunner {
 	public void testProduceImageProcessingResult() {
 		log.info("Producing record in image result.");
 		for(int i=0; i<10; i++) {
-			Bbox bbox = Bbox.newBuilder().setH(1).setW(10).setX(1).setY(2).build();
-			Image image = Image.newBuilder().setId(i +"").setBbox(bbox).setScore(99).setType("person").build();
+			Bbox bbox = Bbox.newBuilder().setH(167.119140625).setW(86.74021911621094).setX(263.0750732421875).setY(171.4024200439453).build();
+			Result result = Result.newBuilder().setBbox(bbox).setScore(91.80992841720581).setType("person").build();
+			List<Result> results = new ArrayList<Result>();
+			results.add(result);
+			Image image = Image.newBuilder().setId(i +"").setResults(results).build();
 			List<Image> images = new ArrayList<>();
 			images.add(image);
-			AnalysisResult analysisResult = AnalysisResult.newBuilder().setIdInstallation("7777").setPosese("PRUEBA-MSL").setSei("1234567890").setId(i +"").setDevice("PANEL").setImages(images).build();
-			producerImageProcessingResult.sendRecordWithResult(String.valueOf(i), analysisResult);
+			AnalysisResult analysisResult = AnalysisResult.newBuilder().setInstallationId(777777).setPosese("PRUEBA-MSL").setSei("036659950103202100030800").setId(i +"").setZoneId("YR02").setImages(images).build();
+			producerImageProcessingResult.sendRecordWithResult(Integer.valueOf(i), analysisResult);
 		}
 	}
 	

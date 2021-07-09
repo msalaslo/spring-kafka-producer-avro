@@ -7,12 +7,9 @@
         "type": "string"
       }
     },
-        {
-      "name": "idInstallation",
-      "type": {
-        "avro.java.string": "String",
-        "type": "string"
-      }
+    {
+      "name": "installationId",
+      "type": "int"
     },
     {
       "name": "posese",
@@ -29,7 +26,7 @@
       }
     },
     {
-      "name": "device",
+      "name": "zoneId",
       "type": {
         "avro.java.string": "String",
         "type": "string"
@@ -48,39 +45,51 @@
               }
             },
             {
-              "name": "score",
-              "type": "int"
-            },
-            {
-              "name": "type",
+              "name": "results",
               "type": {
-                "avro.java.string": "String",
-                "type": "string"
-              }
-            },
-            {
-              "name": "bbox",
-              "type": {
-                "fields": [
-                  {
-                    "name": "x",
-                    "type": "int"
-                  },
-                  {
-                    "name": "y",
-                    "type": "int"
-                  },
-                  {
-                    "name": "w",
-                    "type": "int"
-                  },
-                  {
-                    "name": "h",
-                    "type": "int"
-                  }
-                ],
-                "name": "Bbox",
-                "type": "record"
+                "items": {
+                  "fields": [
+                    {
+                      "name": "score",
+                      "type": "double"
+                    },
+                    {
+                      "name": "type",
+                      "type": {
+                        "avro.java.string": "String",
+                        "type": "string"
+                      }
+                    },
+                    {
+                      "name": "bbox",
+                      "type": {
+                        "fields": [
+                          {
+                            "name": "x",
+                            "type": "double"
+                          },
+                          {
+                            "name": "y",
+                            "type": "double"
+                          },
+                          {
+                            "name": "w",
+                            "type": "double"
+                          },
+                          {
+                            "name": "h",
+                            "type": "double"
+                          }
+                        ],
+                        "name": "Bbox",
+                        "type": "record"
+                      }
+                    }
+                  ],
+                  "name": "Result",
+                  "type": "record"
+                },
+                "type": "array"
               }
             }
           ],

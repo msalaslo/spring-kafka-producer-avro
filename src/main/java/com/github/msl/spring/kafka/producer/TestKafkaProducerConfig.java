@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.StringSerializer;
+import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -59,21 +59,27 @@ public class TestKafkaProducerConfig {
 		props.put("sasl.mechanism", producerSaslMechanism);
 		props.put("sasl.jaas.config", producerSaslJaasConfig);
 		
+		// Best practice is to register schemas outside of the client application to control when schemas are registered with Schema Registry and how they evolve
+		props.put("auto.register.schemas", false);
+		
+		props.put("use.latest.version", true);
+		
+		
 //		props.put("basic.auth.credentials.source", srAuthCredentialsSource);
 //		props.put("basic.auth.user.info", srUserInfo);
     	return props;
     }
     
     @Bean
-    public ProducerFactory<String, AnalysisResult> analysisResultProducerFactory() {
+    public ProducerFactory<Integer, AnalysisResult> analysisResultProducerFactory() {
     	Map<String, Object> props = getKafkaConnProps();
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
     	return new DefaultKafkaProducerFactory<>(props);
     }
         
     @Bean
-    public KafkaTemplate<String, AnalysisResult> analysisResultKafkaTemplate() {
+    public KafkaTemplate<Integer, AnalysisResult> analysisResultKafkaTemplate() {
         return new KafkaTemplate<>(analysisResultProducerFactory());
     }
        
