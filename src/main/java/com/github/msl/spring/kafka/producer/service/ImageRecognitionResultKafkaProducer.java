@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
-import com.github.msl.spring.kafka.producer.TestKafkaProducerConfig;
 import com.verisure.advmon.image.AnalysisResult;
 
 import lombok.extern.slf4j.Slf4j;
@@ -17,27 +16,29 @@ import lombok.extern.slf4j.Slf4j;
 public class ImageRecognitionResultKafkaProducer {
 
 	@Autowired
-	private KafkaTemplate<Integer, AnalysisResult> analysisResultTemplate;
-
+	private KafkaTemplate<String, AnalysisResult> analysisResultTemplate;
+	
 	@Autowired
-	TestKafkaProducerConfig config;
+	private KafkaProducerConfig kafkaProducerConfig;
+	
 
-	public void sendRecord(Integer key, AnalysisResult analysisResult) {
-		log.info("Sending message to topic " + config.getEventProducerTopicName() + " with key=[" + key + ", value=["
+
+	public void sendRecord(String key, AnalysisResult analysisResult) {
+		log.info("Sending message to topic " + kafkaProducerConfig.getTopicImages() + " with key=[" + key + ", value=["
 				+ analysisResult + "]");
-		analysisResultTemplate.send(config.getEventProducerTopicName(), key, analysisResult);
+		analysisResultTemplate.send(kafkaProducerConfig.getTopicImages(), key, analysisResult);
 	}
 
-	public void sendRecordWithResult(Integer key, AnalysisResult analysisResult) {
-		log.info("Sending message to topic " + config.getEventProducerTopicName() + "  with key=[" + key + ", value=["
+	public void sendRecordWithResult(String key, AnalysisResult analysisResult) {
+		log.info("Sending message to topic " + kafkaProducerConfig.getTopicImages() + "  with key=[" + key + ", value=["
 				+ analysisResult + "]");
 
-		ListenableFuture<SendResult<Integer, AnalysisResult>> future = analysisResultTemplate
-				.send(config.getEventProducerTopicName(), key, analysisResult);
-		future.addCallback(new ListenableFutureCallback<SendResult<Integer, AnalysisResult>>() {
+		ListenableFuture<SendResult<String, AnalysisResult>> future = analysisResultTemplate
+				.send(kafkaProducerConfig.getTopicImages(), key, analysisResult);
+		future.addCallback(new ListenableFutureCallback<SendResult<String, AnalysisResult>>() {
 
 			@Override
-			public void onSuccess(SendResult<Integer, AnalysisResult> result) {
+			public void onSuccess(SendResult<String, AnalysisResult> result) {
 				log.info("Sent message with key=[" + key + ", value=[" + analysisResult + "], offset=["
 						+ result.getRecordMetadata().offset() + "]");
 			}

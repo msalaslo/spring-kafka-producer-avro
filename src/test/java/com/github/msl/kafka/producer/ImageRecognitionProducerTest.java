@@ -35,7 +35,7 @@ public class ImageRecognitionProducerTest {
 			images.add(image);
 			AnalysisResult analysisResult = AnalysisResult.newBuilder().setInstallationId(777777).setPosese("PRUEBA-MSL-TEST").setSei("036659950103202100030800").setId(i +"").setZoneId("YR02").setImages(images).build();
 
-			producer.sendRecord(Integer.valueOf(i), analysisResult);
+			producer.sendRecord(i + "", analysisResult);
 		}
 	}
 
